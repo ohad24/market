@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends
 from fastapi import APIRouter
 from config import Settings, get_settings
+settings = get_settings()
 from routers import users
 
 

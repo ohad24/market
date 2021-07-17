@@ -1,8 +1,6 @@
 from models.user import User
 from fastapi import APIRouter
-
 from db import get_db
-# from config import settings
 
 db = get_db()
 router = APIRouter()
@@ -12,7 +10,6 @@ router = APIRouter()
 async def list_users():
     users = []
     for user in db.users.find():
-        # print(user)
         users.append(User(**user))
     return {"users": users}
 

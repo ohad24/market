@@ -4,21 +4,28 @@ import sys
 sys.path.append("src/api/")
 import main
 import json
+import config
 
 client = TestClient(main.app)
 
 
-# def get_settings_override():
-#     return config.Settings(db_name="test")
+def get_settings_override():
+    return config.Settings(db_name="test")
 
 
-# main.app.dependency_overrides[config.get_settings] = get_settings_override
+main.app.dependency_overrides[config.get_settings] = get_settings_override
 
 
 def test_settings():
     response = client.get("/info")
     data = response.json()
-    assert data == {}
+    assert response.status_code == 200
+    assert data == {
+        "db_name": "test",
+        "db_host": "localhost",
+        "db_password": "example",
+        "db_username": "root",
+    }
 
 
 def test_read_main():
