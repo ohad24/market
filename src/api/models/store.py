@@ -1,6 +1,8 @@
 from models.common import DBBaseModel
 from models.product import Product
-from main import db
+from db import get_db
+
+db = get_db()
 
 
 class Store(DBBaseModel):
@@ -9,6 +11,8 @@ class Store(DBBaseModel):
     active: bool = True
     products: list[Product] = []
 
-    # def get_products(self) -> list:
-    #     self.products = db.products.find({'store_id': self.id})
+    def get_products(self) -> list:
+        """ function which returns the products in the store """
+        self.products = db.products.find({'store_id': self.id})
+        return self.products
 

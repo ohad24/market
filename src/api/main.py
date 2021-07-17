@@ -2,13 +2,14 @@ from fastapi import FastAPI, Depends
 from fastapi import APIRouter
 from config import Settings, get_settings
 settings = get_settings()
-from routers import users
+from routers import users, stores
 
 
 app = FastAPI()
 app.include_router(APIRouter())
 base_router = APIRouter(prefix="/api/v1")
 base_router.include_router(users.router, prefix="/users")
+base_router.include_router(stores.router, prefix="/stores")
 
 
 @app.get("/")
