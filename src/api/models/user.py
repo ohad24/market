@@ -1,34 +1,9 @@
-from pydantic import BaseModel, Field
-from bson import ObjectId
+from models.common import DBBaseModel
 from typing import Optional
+from datetime import datetime, timezone
 
 
-class PyObjectId(ObjectId):
-    """https://python.plainenglish.io/how-to-use-fastapi-with-mongodb-75b43c8e541d"""
-
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid objectid")
-        return ObjectId(v)
-
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
-
-
-class User(BaseModel):
-    # def __init__(self, id: int):
-    id: Optional[PyObjectId] = Field(alias="_id")
+class User(DBBaseModel):
     name: str
-
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-
-    def plus(self):
-        return self.id + 1
+    password: Optional[str]
+    create_date: Optional[datetime] = datetime.now(timezone.utc)
