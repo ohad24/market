@@ -15,4 +15,5 @@ def test_create_user():
         headers=headers,
     )
     assert response.status_code == 200
-    assert "_id" in response.json().get("user").keys()
+    assert "name" in response.json().get("user").keys()
+    assert "test1" in response.json().get("user").get("name")

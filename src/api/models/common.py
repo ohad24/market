@@ -1,7 +1,8 @@
 from bson import ObjectId
-from pydantic import BaseModel as PydanticBaseModel
-from typing import Optional
-from pydantic import Field
+from pydantic import BaseModel, PrivateAttr
+from typing import Optional, Any
+from pydantic import Field, schema
+from datetime import datetime
 
 
 class PyObjectId(ObjectId):
@@ -22,11 +23,25 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 
-class DBBaseModel(PydanticBaseModel):
+class DBBaseModel(BaseModel):
     """https://pydantic-docs.helpmanual.io/usage/model_config/#change-behaviour-globally"""
 
-    id: Optional[PyObjectId] = Field(alias="_id")
+    _db_id: PyObjectId = PrivateAttr(Field(alias="_id"))
+    create_date: datetime = Field(
+        default_factory=datetime.utcnow, hidden_from_schema=True
+    )
 
     class Config:
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
+
+
+def field_schema(field: DBBaseModel, **kwargs: Any) -> Any:
+    if field.field_info.extra.get("hidden_from_schema", False):
+        raise schema.SkipField(f"{field.name} field is being hidden")
+    else:
+        return original_field_schema(field, **kwargs)
+
+
+original_field_schema = schema.field_schema
+schema.field_schema = field_schema
