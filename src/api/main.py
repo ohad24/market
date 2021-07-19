@@ -10,6 +10,7 @@ app.include_router(APIRouter())
 base_router = APIRouter(prefix="/api/v1")
 base_router.include_router(users.router, prefix="/users")
 base_router.include_router(stores.router, prefix="/stores")
+base_router.include_router(stores.router, prefix="/products")
 
 
 @app.get("/")

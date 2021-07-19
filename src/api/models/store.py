@@ -9,7 +9,7 @@ class Store(DBBaseModel):
     name: str
     description: str = ""
     active: bool = True
-    products: list[Product] = []
+    # products: list[Product] = []
 
     def get_products(self) -> list:
         """ function which returns the products in the store """
