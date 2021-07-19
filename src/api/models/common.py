@@ -3,6 +3,8 @@ from pydantic import BaseModel, PrivateAttr
 from typing import Optional, Any
 from pydantic import Field, schema
 from datetime import datetime
+import random
+import string
 
 
 class PyObjectId(ObjectId):
@@ -45,3 +47,8 @@ def field_schema(field: DBBaseModel, **kwargs: Any) -> Any:
 
 original_field_schema = schema.field_schema
 schema.field_schema = field_schema
+
+
+# function which generates random string, 10 chars long to be used as general id for any object
+def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
