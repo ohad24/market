@@ -4,7 +4,7 @@ from pydantic import Field, PrivateAttr
 
 
 class User(DBBaseModel):
-    user_id: Optional[str] = Field(
+    user_id: str = Field(
         hidden_from_schema=True,
         title="User ID",
         default_factory=random_string_generator,

@@ -19,5 +19,5 @@ async def create_store(store: Store):
     if hasattr(store, "id"):
         delattr(store, "id")
     ret = db.stores.insert_one(store.dict(by_alias=True))
-    store.id = ret.inserted_id
+    store._db_id = ret.inserted_id
     return {"store": store}
