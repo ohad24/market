@@ -1,6 +1,6 @@
-from typing import Collection
 from conftest import client
 from db import get_db
+from main import settings
 
 
 class TestAPISetup:
@@ -8,12 +8,7 @@ class TestAPISetup:
         response = client.get("/info")
         data = response.json()
         assert response.status_code == 200
-        assert data == {
-            "db_name": "test",
-            "db_host": "localhost",
-            "db_password": "example",
-            "db_username": "root",
-        }
+        assert data == settings.dict()
 
     def test_db_connection(self):
         db = get_db()

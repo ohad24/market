@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     db_name: str = os.environ.get("DB_NAME", "dev")
     db_username: str = os.environ.get("DB_USERNAME", "root")
     db_password: str = os.environ.get("DB_PASSWORD", "example")
+    app_entity_id_length: int = 10
 
 
 @lru_cache()

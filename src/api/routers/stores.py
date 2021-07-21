@@ -27,7 +27,7 @@ async def read_store(store_id):
     ret = db.stores.find_one({"store_id": store_id})
     if not ret:
         raise apihttpexception.store.e404
-    return {"store": Store(**ret)}
+    return {"store": Store(**ret).dict(exclude={"products"})}
 
 
 @router.get("/{store_id}/products")

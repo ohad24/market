@@ -1,7 +1,9 @@
+from typing import Optional
 from models.common import DBBaseModel, random_string_generator
 from pydantic import Field, validator, condecimal
 from bson.decimal128 import Decimal128
 from db import get_db
+from main import settings
 
 db = get_db()
 
@@ -11,12 +13,21 @@ class Product(DBBaseModel):
         hidden_from_schema=True,
         title="Product ID",
         default_factory=random_string_generator,
+        min_length=settings.app_entity_id_length,
+        max_length=settings.app_entity_id_length,
     )
-    name: str
-    description: str = ""
-    price: condecimal(max_digits=10, decimal_places=2) = 0.0
-    active: bool = True
-    store_id: str
+    name: str = Field(title="Product name", min_length=3, max_length=200)
+    description: Optional[str] = Field(
+        title="Product description", max_length=500, default=None
+    )
+    price: condecimal(max_digits=8, decimal_places=2) = Field(
+        title="Product price",
+        min_value="0.00",
+        max_value="999999.99",
+        default="0.00",
+    )
+    active: bool = Field(title="Is product active", default=True)
+    store_id: str = Field(title="Store ID", default="")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

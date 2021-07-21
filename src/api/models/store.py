@@ -3,6 +3,7 @@ from db import get_db
 from typing import Optional
 from pydantic import Field
 from models.product import Product
+from main import settings
 
 db = get_db()
 
@@ -12,11 +13,20 @@ class Store(DBBaseModel):
         hidden_from_schema=True,
         title="Store ID",
         default_factory=random_string_generator,
+        min_length=settings.app_entity_id_length,
+        max_length=settings.app_entity_id_length,
     )
-    name: str
-    description: Optional[str] = ""
-    active: Optional[bool] = True
-    products: list[Product] = Field(hidden_from_schema=True, default_factory=list)
+    name: str = Field(title="Store name", min_length=2, max_length=50)
+    description: Optional[str] = Field(
+        title="Store description", default=None, max_length=500
+    )
+    active: Optional[bool] = Field(title="Is store active", default=True)
+    products: list[Product] = Field(
+        hidden_from_schema=True, default_factory=list, title="Products in store"
+    )
+
+    class Config:
+        title = "Store model"
 
     def get_products(self) -> list:
         """function which returns the products in the store"""
