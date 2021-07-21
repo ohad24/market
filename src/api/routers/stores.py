@@ -19,7 +19,7 @@ async def list_stores():
 async def create_store(store: Store):
     ret = db.stores.insert_one(store.dict(by_alias=True))
     store._db_id = ret.inserted_id
-    return {"store": store}
+    return {"store": store.dict(exclude={"products"})}
 
 
 @router.get("/{store_id}")

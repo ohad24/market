@@ -7,38 +7,21 @@ import string
 from bson.decimal128 import Decimal128
 
 
-class PyObjectId(ObjectId):
-    """https://python.plainenglish.io/how-to-use-fastapi-with-mongodb-75b43c8e541d"""
-
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid objectid")
-        return ObjectId(v)
-
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
-
-
 class DBBaseModel(BaseModel):
-    """https://pydantic-docs.helpmanual.io/usage/model_config/#change-behaviour-globally"""
+    # * https://pydantic-docs.helpmanual.io/usage/model_config/#change-behaviour-globally
 
-    _db_id: PyObjectId = PrivateAttr(Field(alias="_id"))
+    _db_id: ObjectId = PrivateAttr(Field(alias="_id"))
     create_date: datetime = Field(
         default_factory=datetime.utcnow, hidden_from_schema=True
     )
 
     class Config:
         arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str, Decimal128: lambda v: str(v)}
+        json_encoders = {ObjectId: str, Decimal128: str}
 
 
 def field_schema(field: DBBaseModel, **kwargs: Any) -> Any:
+    # * https://github.com/tiangolo/fastapi/issues/1378
     if field.field_info.extra.get("hidden_from_schema", False):
         raise schema.SkipField(f"{field.name} field is being hidden")
     else:
