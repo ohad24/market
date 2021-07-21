@@ -16,8 +16,6 @@ async def list_users():
 
 @router.post("/")
 async def create_user(user: User):
-    if hasattr(user, "id"):
-        delattr(user, "id")
     ret = db.users.insert_one(user.dict(by_alias=True))
     user._db_id = ret.inserted_id
     return {"user": user}

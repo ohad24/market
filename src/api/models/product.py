@@ -22,9 +22,6 @@ class Product(DBBaseModel):
         super().__init__(*args, **kwargs)
         self.price = Decimal128(str(self.price))
 
-    class Config:
-        json_encoders = {Decimal128: lambda v: str(v)}
-
     @validator("store_id")
     def check_store_id(cls, v):
         ret = db.stores.find_one({"store_id": v})

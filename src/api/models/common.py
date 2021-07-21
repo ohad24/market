@@ -1,10 +1,10 @@
 from bson import ObjectId
-from pydantic import BaseModel, PrivateAttr
+from pydantic import BaseModel, PrivateAttr, Field, schema
 from typing import Optional, Any
-from pydantic import Field, schema
 from datetime import datetime
 import random
 import string
+from bson.decimal128 import Decimal128
 
 
 class PyObjectId(ObjectId):
@@ -35,7 +35,7 @@ class DBBaseModel(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
+        json_encoders = {ObjectId: str, Decimal128: lambda v: str(v)}
 
 
 def field_schema(field: DBBaseModel, **kwargs: Any) -> Any:
@@ -51,4 +51,4 @@ schema.field_schema = field_schema
 
 # function which generates random string, 10 chars long to be used as general id for any object
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
+    return "".join(random.choice(chars) for _ in range(size))
