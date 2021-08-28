@@ -3,7 +3,7 @@ from db import get_db
 from typing import Optional
 from pydantic import Field
 from models.product import Product
-from main import settings
+from base_common import settings
 
 db = get_db()
 

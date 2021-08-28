@@ -1,6 +1,6 @@
 from conftest import client
 from db import get_db
-from main import settings
+from base_common import settings
 
 
 class TestAPISetup:

@@ -3,7 +3,7 @@ from models.common import DBBaseModel, random_string_generator
 from pydantic import Field, validator, condecimal
 from bson.decimal128 import Decimal128
 from db import get_db
-from main import settings
+from base_common import settings
 
 db = get_db()
 

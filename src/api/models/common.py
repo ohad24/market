@@ -5,7 +5,7 @@ from datetime import datetime
 import random
 import string
 from bson.decimal128 import Decimal128
-from main import settings
+from base_common import settings
 
 
 class DBBaseModel(BaseModel):

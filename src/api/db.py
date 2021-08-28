@@ -1,6 +1,5 @@
 import pymongo
-import os
-from main import settings
+from base_common import settings
 
 
 def get_db_client():

@@ -1,4 +1,4 @@
-from models.user import User
+from base_common import User
 from fastapi import APIRouter
 from db import get_db
 

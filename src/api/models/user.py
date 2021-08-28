@@ -1,7 +1,7 @@
 from models.common import DBBaseModel, random_string_generator
 from typing import Optional, Any
 from pydantic import Field, PrivateAttr
-from main import settings
+from base_common import settings
 
 
 class User(DBBaseModel):
