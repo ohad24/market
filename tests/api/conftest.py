@@ -1,6 +1,8 @@
 import sys
 import os
 
+from requests.models import Response
+
 sys.path.append("src/api/")
 os.environ["DB_NAME"] = "test"
 
@@ -12,6 +14,7 @@ import pytest
 from models.store import Store
 from models.product import Product
 from db import get_db
+import json
 
 
 # def get_settings_override():
@@ -50,3 +53,23 @@ def product_data(store_data):
     product_date = db.products.find_one({"_id": ret.inserted_id})
     product = Product(**product_date)
     return product
+
+
+# @pytest.fixture()
+def create_user(): # TODO: use the API and fixture
+    response = client.post(
+        "/api/v1/users/", data=json.dumps({"name": "test11", "password": "1234"})
+    )
+
+
+@pytest.fixture
+def token_header():
+    response = client.post(
+        "/token",
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        data="username=test11&password=1234",
+    )
+    auth_data = response.json()
+    return {
+        "Authorization": f"{auth_data.get('token_type')} {auth_data.get('access_token')}"
+    } # TODO: use token model

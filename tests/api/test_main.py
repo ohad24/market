@@ -1,11 +1,14 @@
-from conftest import client
+from conftest import client, create_user, token_header
 from db import get_db
 from base_common import settings
 
 
+create_user()
+
+
 class TestAPISetup:
-    def test_settings(self):
-        response = client.get("/info")
+    def test_settings(self, token_header):
+        response = client.get("/info", headers=token_header)
         data = response.json()
         assert response.status_code == 200
         assert data == settings.dict()

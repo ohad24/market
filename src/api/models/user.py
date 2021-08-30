@@ -13,4 +13,5 @@ class User(DBBaseModel):
         max_length=settings.app_entity_id_length,
     )
     name: str = Field(title="User name", min_length=5, max_length=20)
-    _password: Optional[str] = PrivateAttr(Field("", title="Password"))
+    # _password: Optional[str] = PrivateAttr(Field("", title="Password"))
+    password: str = Field(title="Password")
